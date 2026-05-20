@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaspi AI Чатбот — Исследование</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .scale-option:hover {
+            transform: scale(1.05);
+        }
+        .scale-option input {
+            transition: all 0.1s ease;
+        }
+        .block-transition {
+            transition: all 0.2s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div id="app">
+        <div class="max-w-3xl mx-auto py-8 px-4">
+            <!-- ПРИВЕТСТВЕННЫЙ БЛОК -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8 z-10">
+                <h1 class="text-2xl font-bold mb-2">{{ ui.title[currentLang] }}</h1>
+                <!-- <p class="text-gray-700 mb-2">{{ ui.subtitle[currentLang] }}</p> -->
+                <div class="text-gray-600 text-sm mt-4 space-y-1">
+                    <p>📌 {{ ui.instruction1[currentLang] }}</p>
+                    <p>📌 {{ ui.instruction2[currentLang] }}</p>
+                    <p>📌 {{ ui.instruction3[currentLang] }}</p>
+                    <p class="text-gray-500 mt-2">🔒 {{ ui.anonymous_note[currentLang] }}</p>
+                </div>
+                <div class="mt-4 flex justify-end">
+                    <button @click="toggleLanguage" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition">
+                        {{ ui.language_switch[currentLang] }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- ЧАСТЬ 1 -->
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">{{ ui.part1_title[currentLang] }}</h2>
+                
+                <!-- БЛОКИ A, B, C (всегда видны) -->
+                <div v-for="block in part1Blocks.slice(0, 3)" :key="block.id" class="bg-white rounded-lg shadow-sm p-6 mb-6 block-transition">
+                    <h3 class="text-xl font-semibold mb-4 border-l-4 border-blue-500 pl-3">
+                        {{ block.title[currentLang] }}
+                    </h3>
+                    
+                    <div v-for="questionKey in block.questions" :key="questionKey" class="mb-5 pb-3 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0"  :data-question-key="questionKey">
+                        <template v-if="surveyData[questionKey]">
+                            <label class="block font-medium mb-3">
+                                <!-- {{ surveyData[questionKey].text[currentLang] }} -->
+                                <span v-html="surveyData[questionKey].text[currentLang]"></span>
+                                <span v-if="surveyData[questionKey].required" class="text-red-500 text-sm"></span>
+                            </label>
+                            
+                            <!-- SCALE: 1-7 -->
+                            <div v-if="surveyData[questionKey].type === 'scale'">
+                                <div class="flex gap-2 md:gap-3 flex-wrap">
+                                    <label v-for="num in 7" :key="num" class="scale-option flex flex-col items-center min-w-[45px] cursor-pointer">
+                                        <input type="radio" :name="questionKey" :value="num" v-model="formData[questionKey]" class="w-5 h-5 cursor-pointer">
+                                        <span class="text-sm mt-1">{{ num }}</span>
+                                    </label>
+                                </div>
+                                <div class="flex justify-between text-xs text-gray-500 mt-2 px-1">
+                                    <span>{{ ui.scale_labels[currentLang][1] }}</span>
+                                    <span>{{ ui.scale_labels[currentLang][4] }}</span>
+                                    <span>{{ ui.scale_labels[currentLang][7] }}</span>
+                                </div>
+                            </div>
+                            
+                            <!-- RADIO (один выбор) -->
+                            <div v-else-if="surveyData[questionKey].type === 'radio'" class="flex gap-4 flex-wrap">
+                                <label v-for="opt in surveyData[questionKey].options" :key="opt.value" class="flex items-center gap-1 cursor-pointer">
+                                    <input type="radio" :name="questionKey" :value="opt.value" v-model="formData[questionKey]" class="cursor-pointer">
+                                    <span>{{ opt.label[currentLang] }}</span>
+                                </label>
+                            </div>
+                            
+                            <!-- CHECKBOX (множественный выбор) -->
+                            <div v-else-if="surveyData[questionKey].type === 'checkbox'" class="flex gap-4 flex-wrap">
+                                <label v-for="opt in surveyData[questionKey].options" :key="opt.value" class="flex items-center gap-1 cursor-pointer">
+                                    <input type="checkbox" :value="opt.value" v-model="formData[questionKey]" class="cursor-pointer">
+                                    <span>{{ opt.label[currentLang] }}</span>
+                                </label>
+                            </div>
+                            
+                            <!-- SELECT (выпадающий список) -->
+                            <div v-else-if="surveyData[questionKey].type === 'select'">
+                                <select v-model="formData[questionKey]" class="border border-gray-300 rounded-lg px-3 py-2 w-full max-w-xs focus:ring-2 focus:ring-blue-500">
+                                    <option value="">-- {{ ui.select_default[currentLang] || 'Выберите' }} --</option>
+                                    <option v-for="opt in surveyData[questionKey].options" :key="opt.value" :value="opt.value">
+                                        {{ opt.label[currentLang] }}
+                                    </option>
+                                </select>
+                            </div>
+                            
+                            <!-- TEXTAREA -->
+                            <div v-else-if="surveyData[questionKey].type === 'textarea'">
+                                <textarea :rows="surveyData[questionKey].rows || 3" v-model="formData[questionKey]" 
+                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"></textarea>
+                            </div>
+                        </template>
+                        <div v-else class="text-red-500 text-sm">
+                            ⚠️ Ошибка: вопрос "{{ questionKey }}" не найден в survey-data.js
+                        </div>
+                    </div>
+                </div>
+
+                <!-- БЛОКИ D, E, F, G, H (только если согласие = ДА) -->
+                <div v-if="isConsentGiven" v-for="block in part1Blocks.slice(3)" :key="block.id" class="bg-white rounded-lg shadow-sm p-6 mb-6 block-transition">
+                    <h3 class="text-xl font-semibold mb-4 border-l-4 border-blue-500 pl-3">
+                        {{ block.title[currentLang] }}
+                    </h3>
+                    
+                    <div v-for="questionKey in block.questions" :key="questionKey" class="mb-5 pb-3 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0"  :data-question-key="questionKey">
+                        <template v-if="surveyData[questionKey]">
+                            <label class="block font-medium mb-3">
+                                <!-- {{ surveyData[questionKey].text[currentLang] }} -->
+                                <span v-html="surveyData[questionKey].text[currentLang]"></span>
+                                <span v-if="surveyData[questionKey].required" class="text-red-500 text-sm"></span>
+                            </label>
+                            
+                            <!-- SCALE: 1-7 -->
+                            <div v-if="surveyData[questionKey].type === 'scale'">
+                                <div class="flex gap-2 md:gap-3 flex-wrap">
+                                    <label v-for="num in 7" :key="num" class="scale-option flex flex-col items-center min-w-[45px] cursor-pointer">
+                                        <input type="radio" :name="questionKey" :value="num" v-model="formData[questionKey]" class="w-5 h-5 cursor-pointer">
+                                        <span class="text-sm mt-1">{{ num }}</span>
+                                    </label>
+                                </div>
+                                <div class="flex justify-between text-xs text-gray-500 mt-2 px-1">
+                                    <span>{{ ui.scale_labels[currentLang][1] }}</span>
+                                    <span>{{ ui.scale_labels[currentLang][4] }}</span>
+                                    <span>{{ ui.scale_labels[currentLang][7] }}</span>
+                                </div>
+                            </div>
+                            
+                            <!-- RADIO -->
+                            <div v-else-if="surveyData[questionKey].type === 'radio'" class="flex gap-4 flex-wrap">
+                                <label v-for="opt in surveyData[questionKey].options" :key="opt.value" class="flex items-center gap-1 cursor-pointer">
+                                    <input type="radio" :name="questionKey" :value="opt.value" v-model="formData[questionKey]" class="cursor-pointer">
+                                    <span>{{ opt.label[currentLang] }}</span>
+                                </label>
+                            </div>
+                            
+                            <!-- CHECKBOX -->
+                            <div v-else-if="surveyData[questionKey].type === 'checkbox'" class="flex gap-4 flex-wrap">
+                                <label v-for="opt in surveyData[questionKey].options" :key="opt.value" class="flex items-center gap-1 cursor-pointer">
+                                    <input type="checkbox" :value="opt.value" v-model="formData[questionKey]" class="cursor-pointer">
+                                    <span>{{ opt.label[currentLang] }}</span>
+                                </label>
+                            </div>
+                            
+                            <!-- TEXTAREA -->
+                            <div v-else-if="surveyData[questionKey].type === 'textarea'">
+                                <textarea :rows="surveyData[questionKey].rows || 3" v-model="formData[questionKey]" 
+                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"></textarea>
+                            </div>
+                        </template>
+                        <div v-else class="text-red-500 text-sm">
+                            ⚠️ Ошибка: вопрос "{{ questionKey }}" не найден в survey-data.js
+                        </div>
+                    </div>
+                </div>
+
+                <!-- СООБЩЕНИЕ ПРИ ОТКАЗЕ -->
+                <div v-if="isConsentDenied" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                    <p class="text-red-700 font-medium">❌ {{ ui.refuseMessage[currentLang] }}</p>
+                </div>
+            </div>
+
+            <!-- РАЗДЕЛИТЕЛЬ между Частью 1 и Частью 2 (только если согласие = ДА) -->
+            <div v-if="isConsentGiven" class="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-8 rounded">
+                <p class="text-yellow-800 font-medium">{{ ui.divider_message[currentLang] }}</p>
+                <p class="text-yellow-600 text-sm mt-1">{{ ui.divider_hint[currentLang] || '' }}</p>
+            </div>
+
+            <!-- ЧАСТЬ 2 (только если согласие = ДА) -->
+            <div v-if="isConsentGiven" class="mb-6">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">{{ ui.part2_title[currentLang] }}</h2>
+                
+                <div v-for="block in part2Blocks" :key="block.id" class="bg-white rounded-lg shadow-sm p-6 mb-6 block-transition">
+                    <h3 class="text-xl font-semibold mb-4 border-l-4 border-blue-500 pl-3">
+                        {{ block.title[currentLang] }}
+                    </h3>
+                    
+                    <div v-for="questionKey in block.questions" :key="questionKey" class="mb-5 pb-3 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0"  :data-question-key="questionKey">
+                        <template v-if="surveyData[questionKey]">
+                            <label class="block font-medium mb-3">
+                                <!-- {{ surveyData[questionKey].text[currentLang] }} -->
+                                <span v-html="surveyData[questionKey].text[currentLang]"></span>
+                                <span v-if="surveyData[questionKey].required" class="text-red-500 text-sm"></span>
+                            </label>
+                            
+                            <!-- SCALE: 1-7 -->
+                            <div v-if="surveyData[questionKey].type === 'scale'">
+                                <div class="flex gap-2 md:gap-3 flex-wrap">
+                                    <label v-for="num in 7" :key="num" class="scale-option flex flex-col items-center min-w-[45px] cursor-pointer">
+                                        <input type="radio" :name="questionKey" :value="num" v-model="formData[questionKey]" class="w-5 h-5 cursor-pointer">
+                                        <span class="text-sm mt-1">{{ num }}</span>
+                                    </label>
+                                </div>
+                                <div class="flex justify-between text-xs text-gray-500 mt-2 px-1">
+                                    <span>{{ ui.scale_labels[currentLang][1] }}</span>
+                                    <span>{{ ui.scale_labels[currentLang][4] }}</span>
+                                    <span>{{ ui.scale_labels[currentLang][7] }}</span>
+                                </div>
+                            </div>
+                            
+                            <!-- RADIO -->
+                            <div v-else-if="surveyData[questionKey].type === 'radio'" class="flex gap-4 flex-wrap">
+                                <label v-for="opt in surveyData[questionKey].options" :key="opt.value" class="flex items-center gap-1 cursor-pointer">
+                                    <input type="radio" :name="questionKey" :value="opt.value" v-model="formData[questionKey]" class="cursor-pointer">
+                                    <span>{{ opt.label[currentLang] }}</span>
+                                </label>
+                            </div>
+                            
+                            <!-- CHECKBOX -->
+                            <div v-else-if="surveyData[questionKey].type === 'checkbox'" class="flex gap-4 flex-wrap">
+                                <label v-for="opt in surveyData[questionKey].options" :key="opt.value" class="flex items-center gap-1 cursor-pointer">
+                                    <input type="checkbox" :value="opt.value" v-model="formData[questionKey]" class="cursor-pointer">
+                                    <span>{{ opt.label[currentLang] }}</span>
+                                </label>
+                            </div>
+                            
+                            <!-- TEXTAREA -->
+                            <div v-else-if="surveyData[questionKey].type === 'textarea'">
+                                <textarea :rows="surveyData[questionKey].rows || 3" v-model="formData[questionKey]" 
+                                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"></textarea>
+                            </div>
+                        </template>
+                        <div v-else class="text-red-500 text-sm">
+                            ⚠️ Ошибка: вопрос "{{ questionKey }}" не найден в survey-data.js
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- КНОПКА ОТПРАВКИ -->
+            <div class="sticky bottom-4 bg-white rounded-lg shadow-md p-4 flex justify-center border border-gray-200">
+                <button @click="submitForm" :disabled="isSubmitting" 
+                    class="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold px-8 py-3 rounded-lg transition text-lg">
+                    {{ isSubmitting ? (ui.submitting[currentLang] || 'Отправка...') : ui.submit_button[currentLang] }}
+                </button>
+            </div>
+
+            <!-- СООБЩЕНИЕ О РЕЗУЛЬТАТЕ -->
+            <div v-if="submitMessage" class="fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transition-all" 
+                 :class="submitMessageType === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'">
+                {{ submitMessage }}
+                <button @click="submitMessage = ''" class="ml-4 text-white font-bold">×</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="survey-data.js"></script>
+    <script src="blocks-config.js"></script>
+    <script>
+        const { createApp, ref, reactive, computed, watch } = Vue
+        
+    
+        createApp({
+            setup() {
+                const currentLang = ref('ru')
+                const formData = reactive({})
+                const submitMessage = ref('')
+                const submitMessageType = ref('success')
+                const isSubmitting = ref(false)
+
+                // UI Тексты интерфейса
+                const ui = {
+                    title: { ru: "Исследование AI-чатбота Kaspi.kz", en: "Kaspi.kz AI Chatbot Survey" },
+                    subtitle: { ru: "Расширенная ECM-модель · Республика Казахстан", en: "Extended ECM Model · Republic of Kazakhstan" },
+                    instruction1: { ru: "Сначала заполните ЧАСТЬ 1 (ДО использования чатбота)", en: "First complete PART 1 (BEFORE using the chatbot)" },
+                    instruction2: { ru: "Затем перейдите в чатбота Kaspi.kz, задайте ему вопрос", en: "Then go to the Kaspi.kz chatbot and ask a question" },
+                    instruction3: { ru: "После этого вернитесь и заполните ЧАСТЬ 2 (ПОСЛЕ использования)", en: "After that, return and complete PART 2 (AFTER using)" },
+                    anonymous_note: { ru: "Все ответы анонимны и используются только в научных целях", en: "All answers are anonymous and used only for research purposes" },
+                    language_switch: { ru: "English", en: "Русский" },
+                    part1_title: { ru: "ЧАСТЬ 1: ДО ИСПОЛЬЗОВАНИЯ", en: "PART 1: BEFORE USE" },
+                    part2_title: { ru: "ЧАСТЬ 2: ПОСЛЕ ИСПОЛЬЗОВАНИЯ", en: "PART 2: AFTER USE" },
+                    divider_message: { ru: "✓ ЗАПОЛНИТЕ ЭТУ ЧАСТЬ ПОСЛЕ ИСПОЛЬЗОВАНИЯ ЧАТБОТА", en: "✓ COMPLETE THIS PART AFTER USING THE CHATBOT" },
+                    divider_hint: { ru: "Если вы ещё не использовали чатбота — сделайте это сейчас, затем вернитесь", en: "If you haven't used the chatbot yet — do it now, then come back" },
+                    submit_button: { ru: "Отправить анкету", en: "Submit Survey" },
+                    submitting: { ru: "Отправка...", en: "Submitting..." },
+                    select_default: { ru: "Выберите", en: "Select" },
+                    refuseMessage: { ru: "Вы отказались от участия. Анкета завершена. Спасибо.", en: "You declined to participate. The survey is complete. Thank you." },
+                    missingFieldsMessage: {
+                        ru: "❌ Пожалуйста, заполните все обязательные поля (отмечены звёздочкой *).",
+                        en: "❌ Please fill in all required fields (marked with *)."
+                    },
+                    scale_labels: {
+                        ru: { 1: "Совершенно не согласен", 4: "Нейтрально", 7: "Полностью согласен" },
+                        en: { 1: "Strongly disagree", 4: "Neutral", 7: "Strongly agree" }
+                    }
+                }
+    
+                // Разделяем блоки на Часть 1 и Часть 2
+                const part1Blocks = blocksConfig.slice(0, 8)
+                const part2Blocks = blocksConfig.slice(8)
+                
+                // Вычисляемые свойства для согласия
+                const isConsentGiven = computed(() => formData.consent === 'yes')
+                const isConsentDenied = computed(() => formData.consent === 'no')
+                        watch(() => formData.consent, (newValue) => {
+    if (newValue === 'no') {
+        setTimeout(() => {
+            window.scrollTo({ behavior: 'smooth', top: document.body.scrollHeight })
+        }, 100)
+    }
+})
+                // Переключение языка
+                function toggleLanguage() {
+                    currentLang.value = currentLang.value === 'ru' ? 'en' : 'ru'
+                }
+    
+                // Автоматическое определение обязательных полей:
+                // Все поля, у которых тип НЕ textarea — обязательные
+                function getAllRequiredKeys() {
+                    const required = []
+                    for (const [key, question] of Object.entries(surveyData)) {
+                        // textarea — необязательные поля (открытые вопросы)
+                        if (question.type !== 'textarea') {
+                            required.push(key)
+                        }
+                    }
+                    return required
+                }
+    
+                // Функция проверки обязательных полей (только для видимых пользователю)
+                function getVisibleRequiredKeys() {
+                    // Все обязательные поля (кроме textarea)
+                    const allRequired = getAllRequiredKeys()
+                    
+                    // Базовые поля (всегда видны)
+                    const baseRequired = [
+                        'gender', 'age', 'education', 'employment', 'city',
+                        'kaspi_years', 'kaspi_frequency', 'kaspi_functions',
+                        'kaspi_trust', 'kaspi_chatbot_before', 'consent'
+                    ]
+                    
+                    // Если consent не выбран или = 'no' — только базовые
+                    if (!formData.consent || formData.consent === 'no') {
+                        return baseRequired
+                    }
+                    
+                    // Если consent = 'yes' — все обязательные поля
+                    return allRequired
+                }
+    
+                // Отправка формы с проверкой
+                async function submitForm() {
+    // 1. Проверяем, что consent выбран
+    if (!formData.consent) {
+        submitMessage.value = currentLang.value === 'ru'
+            ? '❌ Пожалуйста, ответьте на вопрос о согласии (Да / Нет)'
+            : '❌ Please answer the consent question (Yes / No)'
+        submitMessageType.value = 'error'
+        setTimeout(() => { submitMessage.value = '' }, 3000)
+        return
+    }
+
+    // 2. Получаем список обязательных полей для видимых вопросов
+    const requiredKeys = getVisibleRequiredKeys()
+    
+    // 3. Проверяем только видимые обязательные поля
+    const missing = requiredKeys.filter(key => {
+        const value = formData[key]
+        if (Array.isArray(value)) return value.length === 0
+        return !value || value === ''
+    })
+    
+    if (missing.length > 0) {
+        const firstMissingKey = missing[0]
+        const missingElement = document.querySelector(`[data-question-key="${firstMissingKey}"]`)
+        
+        if (missingElement) {
+            // Плавный скролл
+            missingElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            
+            // Подсветка красным
+            missingElement.style.transition = 'all 0.3s ease'
+            // missingElement.style.boxShadow = '0 0 0 2px #ef4444'
+            // missingElement.style.backgroundColor = '#fef2f2'
+            // missingElement.style.padding = '12px'
+            missingElement.className = "bg-red-50 border border-red-200 rounded-lg p-4 mb-6";
+
+            
+            // Убираем подсветку через 2 секунды
+            setTimeout(() => {
+                missingElement.className = 'mb-5 pb-3 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0'
+            }, 2000)
+        }
+        
+        submitMessage.value = ui.missingFieldsMessage[currentLang.value]
+        submitMessageType.value = 'error'
+        setTimeout(() => { submitMessage.value = '' }, 3000)
+        return
+    }
+
+    // 4. Отправка
+    isSubmitting.value = true
+    try {
+        const payload = {
+            ...formData,
+            session_id: Date.now().toString(),
+            submitted_at: new Date().toISOString()
+        }
+        
+        const response = await fetch('http://localhost:3000/api/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        
+        const result = await response.json()
+        
+        if (result.success) {
+            submitMessage.value = currentLang.value === 'ru' 
+                ? '✅ Спасибо! Ваши ответы сохранены.' 
+                : '✅ Thank you! Your answers have been saved.'
+            submitMessageType.value = 'success'
+            Object.keys(formData).forEach(key => delete formData[key])
+        } else {
+            submitMessage.value = '❌ ' + (result.error || (currentLang.value === 'ru' ? 'Ошибка сохранения' : 'Save error'))
+            submitMessageType.value = 'error'
+        }
+        
+        setTimeout(() => { submitMessage.value = '' }, 5000)
+    } catch (error) {
+        submitMessage.value = currentLang.value === 'ru' 
+            ? '❌ Ошибка соединения. Запущен ли сервер? (node server.js)'
+            : '❌ Connection error. Is the server running? (node server.js)'
+        submitMessageType.value = 'error'
+        setTimeout(() => { submitMessage.value = '' }, 5000)
+    } finally {
+        isSubmitting.value = false
+    }
+}
+                return {
+                    currentLang,
+                    formData,
+                    submitMessage,
+                    submitMessageType,
+                    isSubmitting,
+                    ui,
+                    surveyData,
+                    part1Blocks,
+                    part2Blocks,
+                    isConsentGiven,
+                    isConsentDenied,
+                    toggleLanguage,
+                    submitForm
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
