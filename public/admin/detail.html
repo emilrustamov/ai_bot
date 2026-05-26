@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детали ответа — Админка</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div id="app" class="max-w-3xl mx-auto py-8 px-4">
+        <div class="mb-6 flex gap-4">
+            <a href="/admin" class="text-blue-600 hover:underline">← К списку</a>
+            <button @click="logout" class="text-gray-600 hover:underline ml-auto">Выход</button>
+        </div>
+
+        <div v-if="loading" class="text-gray-500">Загрузка...</div>
+
+        <template v-else-if="meta">
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                <div class="flex flex-wrap gap-2 items-center mb-4">
+                    <h1 class="text-xl font-bold">Ответ #{{ meta.id }}</h1>
+                    <span v-if="meta.incomplete" class="bg-orange-100 text-orange-800 text-xs font-medium px-2 py-1 rounded">Неполная</span>
+                </div>
+                <dl class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                    <div><dt class="text-gray-500">Сессия</dt><dd>{{ meta.session_id }}</dd></div>
+                    <div><dt class="text-gray-500">Часть 1</dt><dd>{{ formatDate(meta.part1_at) }}</dd></div>
+                    <div><dt class="text-gray-500">Часть 2</dt><dd>{{ meta.part2_at ? formatDate(meta.part2_at) : '—' }}</dd></div>
+                    <div><dt class="text-gray-500">Согласие</dt><dd>{{ meta.consent }}</dd></div>
+                    <div><dt class="text-gray-500">Язык</dt><dd>{{ meta.lang }}</dd></div>
+                    <div v-if="meta.duration_seconds"><dt class="text-gray-500">Длительность</dt><dd>{{ meta.duration_seconds }} сек</dd></div>
+                </dl>
+            </div>
+
+            <div v-for="block in blocks" :key="block.id" class="bg-white rounded-lg shadow-sm p-6 mb-4">
+                <h2 class="text-lg font-semibold mb-4 border-l-4 border-blue-500 pl-3">{{ block.title }}</h2>
+                <div v-for="q in block.questions" :key="q.key" class="mb-4 pb-4 border-b border-gray-100 last:border-0">
+                    <p class="text-gray-700 text-sm mb-1" v-html="q.text"></p>
+                    <p class="font-medium">{{ q.value }}</p>
+                </div>
+            </div>
+        </template>
+
+        <p v-else class="text-red-600">Запись не найдена</p>
+    </div>
+    <script>
+        const { createApp, ref, onMounted } = Vue;
+        const id = window.location.pathname.split('/').pop();
+
+        createApp({
+            setup() {
+                const loading = ref(true);
+                const meta = ref(null);
+                const blocks = ref([]);
+
+                function formatDate(iso) {
+                    if (!iso) return '—';
+                    return new Date(iso).toLocaleString('ru-RU');
+                }
+
+                async function load() {
+                    const res = await fetch('/api/admin/responses/' + id);
+                    if (res.status === 401) { window.location.href = '/admin/login.html'; return; }
+                    if (!res.ok) { loading.value = false; return; }
+                    const data = await res.json();
+                    meta.value = data.meta;
+                    blocks.value = data.blocks;
+                    loading.value = false;
+                }
+
+                async function logout() {
+                    await fetch('/api/admin/logout', { method: 'POST' });
+                    window.location.href = '/admin/login.html';
+                }
+
+                onMounted(load);
+                return { loading, meta, blocks, formatDate, logout };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

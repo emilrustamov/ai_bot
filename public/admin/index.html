@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ответы — Админка</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div id="app" class="max-w-6xl mx-auto py-8 px-4">
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+            <h1 class="text-2xl font-bold">Ответы анкеты</h1>
+            <div class="flex gap-2">
+                <a href="/api/admin/export.csv" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm">Скачать CSV</a>
+                <button @click="logout" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm">Выход</button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6 grid grid-cols-1 md:grid-cols-5 gap-3">
+            <input v-model="filters.date_from" type="date" class="border rounded-lg px-3 py-2 text-sm" placeholder="Дата от">
+            <input v-model="filters.date_to" type="date" class="border rounded-lg px-3 py-2 text-sm" placeholder="Дата до">
+            <select v-model="filters.consent" class="border rounded-lg px-3 py-2 text-sm">
+                <option value="">Согласие: все</option>
+                <option value="yes">Да</option>
+                <option value="no">Нет</option>
+            </select>
+            <select v-model="filters.is_complete" class="border rounded-lg px-3 py-2 text-sm">
+                <option value="">Статус: все</option>
+                <option value="1">Завершена</option>
+                <option value="0">Неполная</option>
+            </select>
+            <select v-model="filters.city" class="border rounded-lg px-3 py-2 text-sm">
+                <option value="">Город: все</option>
+                <option value="almaty">Алматы</option>
+                <option value="astana">Астана</option>
+                <option value="shymkent">Шымкент</option>
+                <option value="other">Другой</option>
+            </select>
+            <button @click="load" class="md:col-span-5 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm">Применить фильтры</button>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead class="bg-gray-50 border-b">
+                    <tr>
+                        <th class="text-left p-3">ID</th>
+                        <th class="text-left p-3">Часть 1</th>
+                        <th class="text-left p-3">Часть 2</th>
+                        <th class="text-left p-3">Статус</th>
+                        <th class="text-left p-3">Согласие</th>
+                        <th class="text-left p-3">Пол</th>
+                        <th class="text-left p-3">Возраст</th>
+                        <th class="text-left p-3">Город</th>
+                        <th class="text-left p-3"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="row in rows" :key="row.id" class="border-b hover:bg-gray-50">
+                        <td class="p-3">{{ row.id }}</td>
+                        <td class="p-3">{{ formatDate(row.part1_at) }}</td>
+                        <td class="p-3">{{ row.part2_at ? formatDate(row.part2_at) : '—' }}</td>
+                        <td class="p-3">
+                            <span v-if="row.consent === 'yes' && !row.is_complete" class="text-orange-600 font-medium">Неполная</span>
+                            <span v-else-if="row.is_complete" class="text-green-600">OK</span>
+                            <span v-else>—</span>
+                        </td>
+                        <td class="p-3">{{ row.consent || '—' }}</td>
+                        <td class="p-3">{{ row.gender || '—' }}</td>
+                        <td class="p-3">{{ row.age || '—' }}</td>
+                        <td class="p-3">{{ row.city || '—' }}</td>
+                        <td class="p-3">
+                            <a :href="'/admin/responses/' + row.id" class="text-blue-600 hover:underline">Открыть</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p v-if="!rows.length" class="p-6 text-gray-500 text-center">Нет записей</p>
+        </div>
+
+        <div v-if="pagination.pages > 1" class="flex justify-center gap-2 mt-4">
+            <button :disabled="pagination.page <= 1" @click="goPage(pagination.page - 1)" class="px-3 py-1 border rounded disabled:opacity-50">←</button>
+            <span class="px-3 py-1">{{ pagination.page }} / {{ pagination.pages }}</span>
+            <button :disabled="pagination.page >= pagination.pages" @click="goPage(pagination.page + 1)" class="px-3 py-1 border rounded disabled:opacity-50">→</button>
+        </div>
+    </div>
+    <script>
+        const { createApp, ref, reactive, onMounted } = Vue;
+        createApp({
+            setup() {
+                const rows = ref([]);
+                const pagination = ref({ page: 1, limit: 20, total: 0, pages: 1 });
+                const filters = reactive({ date_from: '', date_to: '', consent: '', is_complete: '', city: '' });
+
+                function formatDate(iso) {
+                    if (!iso) return '—';
+                    return new Date(iso).toLocaleString('ru-RU');
+                }
+
+                async function load() {
+                    const q = new URLSearchParams({ page: pagination.value.page, limit: pagination.value.limit });
+                    if (filters.date_from) q.set('date_from', filters.date_from);
+                    if (filters.date_to) q.set('date_to', filters.date_to);
+                    if (filters.consent) q.set('consent', filters.consent);
+                    if (filters.is_complete !== '') q.set('is_complete', filters.is_complete);
+                    if (filters.city) q.set('city', filters.city);
+                    const res = await fetch('/api/admin/responses?' + q);
+                    if (res.status === 401) { window.location.href = '/admin/login.html'; return; }
+                    const data = await res.json();
+                    rows.value = data.data;
+                    pagination.value = data.pagination;
+                }
+
+                function goPage(p) {
+                    pagination.value.page = p;
+                    load();
+                }
+
+                async function logout() {
+                    await fetch('/api/admin/logout', { method: 'POST' });
+                    window.location.href = '/admin/login.html';
+                }
+
+                onMounted(load);
+                return { rows, pagination, filters, formatDate, load, goPage, logout };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
