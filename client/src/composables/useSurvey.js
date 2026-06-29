@@ -22,8 +22,8 @@ export function useSurvey() {
     const surveyComplete = ref(localStorage.getItem('survey_complete') === '1');
     const sessionId = ref(localStorage.getItem('survey_session_id') || '');
 
-    const part1Blocks = blocksConfig.slice(0, 8);
-    const part2Blocks = blocksConfig.slice(8);
+    const part1Blocks = blocksConfig.slice(0, 6);
+    const part2Blocks = blocksConfig.slice(6);
 
     const isConsentGiven = computed(() => formData.consent === 'yes');
     const isConsentDenied = computed(() => formData.consent === 'no');
@@ -44,11 +44,17 @@ export function useSurvey() {
         { text: UI.instruction3, active: part1Submitted.value && isConsentGiven.value && !surveyComplete.value }
     ]);
 
+    // const visiblePart1Blocks = computed(() => {
+    //     if (isConsentGiven.value) return part1Blocks;
+    //     return part1Blocks.slice(0, 3);
+    // });
     const visiblePart1Blocks = computed(() => {
-        if (isConsentGiven.value) return part1Blocks;
-        return part1Blocks.slice(0, 3);
+        if (isConsentGiven.value) {
+            return part1Blocks; // ← Все блоки Части 1 (C-H)
+        }
+        return part1Blocks.slice(0, 1); // ← ТОЛЬКО блок C (согласие)
     });
-
+    
     const progressTotal = computed(() => {
         if (surveyComplete.value) return 0;
         if (part1Submitted.value && isConsentGiven.value) {

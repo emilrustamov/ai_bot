@@ -29,6 +29,7 @@ const blocksConfig = [
         title: { ru: "З. Риск конфиденциальности (PPR) — ДО", en: "H. Privacy Risk (PPR) — BEFORE" },
         questions: ['ppr_before2', 'ppr_before3', 'ppr_before5']
     },
+    //blok2
     {
         id: 'I',
         title: { ru: "И. Воспринимаемое качество информации (IQ)", en: "I. Perceived Information Quality (IQ)" },

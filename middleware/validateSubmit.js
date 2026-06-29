@@ -56,6 +56,13 @@ function validatePayload(data, phase) {
     const errors = [];
     const consent = data.consent;
 
+    console.log('🔍 VALIDATE PAYLOAD:');
+    console.log('  phase:', phase);
+    console.log('  consent:', consent);
+    console.log('  data keys:', Object.keys(data));
+    
+   
+
     if (!data.session_id || typeof data.session_id !== 'string') {
         errors.push('session_id is required');
     }
