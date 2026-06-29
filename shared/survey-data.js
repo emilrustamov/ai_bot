@@ -189,8 +189,8 @@ const surveyData = {
     },
     iq4: {
         text: {
-            ru: "Я ожидаю, что чатбот Kaspi.kz будет предоставлять актуальную информацию (текущие цены, наличие товаров).",
-            en: "I expect that the Kaspi.kz chatbot will provide up-to-date information (current prices, product availability)."
+            ru: "Я ожидаю, что чатбот Kaspi.kz будет предоставлять актуальную информацию.",
+            en: "I expect that the Kaspi.kz chatbot will provide up-to-date information."
         },
         type: "scale",
         min: 1,
@@ -426,8 +426,8 @@ const surveyData = {
     },
     iq_real4: {
         text: {
-            ru: "Чатбот Kaspi.kz предоставил актуальную информацию (правильные цены, наличие товаров).",
-            en: "The Kaspi.kz chatbot provided up-to-date information (correct prices, product availability)."
+            ru: "Чатбот Kaspi.kz предоставил актуальную информацию.",
+            en: "The Kaspi.kz chatbot provided up-to-date information."
         },
         type: "scale",
         min: 1,
