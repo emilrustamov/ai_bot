@@ -160,15 +160,15 @@ const surveyData = {
     },
 
     // ==================== БЛОК Г: Ожидаемое качество информации (IQ) ====================
-    iq1: {
-        text: {
-            ru: "Я ожидаю, что чатбот Kaspi.kz будет предоставлять точную информацию о товарах, ценах и заказах.",
-            en: "I expect that the Kaspi.kz chatbot will provide accurate information about products, prices, and orders."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
+    // iq1: {
+    //     text: {
+    //         ru: "Я ожидаю, что чатбот Kaspi.kz будет предоставлять точную информацию о товарах, ценах и заказах.",
+    //         en: "I expect that the Kaspi.kz chatbot will provide accurate information about products, prices, and orders."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
     iq2: {
         text: {
             ru: "Я ожидаю, что информация от чатбота Kaspi.kz будет полной и достаточной для моих нужд.",
@@ -196,26 +196,26 @@ const surveyData = {
         min: 1,
         max: 7
     },
-    iq5: {
-        text: {
-            ru: "Я ожидаю, что смогу полагаться на информацию чатбота Kaspi.kz при принятии решений о покупке.",
-            en: "I expect that I can rely on the Kaspi.kz chatbot's information when making purchasing decisions."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
+    // iq5: {
+    //     text: {
+    //         ru: "Я ожидаю, что смогу полагаться на информацию чатбота Kaspi.kz при принятии решений о покупке.",
+    //         en: "I expect that I can rely on the Kaspi.kz chatbot's information when making purchasing decisions."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
 
     // ==================== БЛОК Д: Ожидаемая скорость (SP) ====================
-    sp1: {
-        text: {
-            ru: "Я ожидаю, что чатбот Kaspi.kz будет быстро отвечать на мои вопросы.",
-            en: "I expect that the Kaspi.kz chatbot will respond quickly to my questions."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
+    // sp1: {
+    //     text: {
+    //         ru: "Я ожидаю, что чатбот Kaspi.kz будет быстро отвечать на мои вопросы.",
+    //         en: "I expect that the Kaspi.kz chatbot will respond quickly to my questions."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
     sp2: {
         text: {
             ru: "Я ожидаю, что чатбот Kaspi.kz будет обрабатывать мои запросы без заметных задержек.",
@@ -234,15 +234,15 @@ const surveyData = {
         min: 1,
         max: 7
     },
-    sp4: {
-        text: {
-            ru: "Я ожидаю, что при использовании чатбота Kaspi.kz не буду испытывать раздражающего ожидания.",
-            en: "I expect that I will not experience frustrating waiting when using the Kaspi.kz chatbot."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
+    // sp4: {
+    //     text: {
+    //         ru: "Я ожидаю, что при использовании чатбота Kaspi.kz не буду испытывать раздражающего ожидания.",
+    //         en: "I expect that I will not experience frustrating waiting when using the Kaspi.kz chatbot."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
     sp5: {
         text: {
             ru: "Я ожидаю, что общая скорость ответа чатбота Kaspi.kz будет соответствовать моим потребностям.",
@@ -272,24 +272,24 @@ const surveyData = {
         min: 1,
         max: 7
     },
-    em3: {
-        text: {
-            ru: "Я ожидаю, что чатбот Kaspi.kz будет признавать мои опасения и реагировать на них должным образом.",
-            en: "I expect that the Kaspi.kz chatbot will acknowledge my concerns and respond to them appropriately."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
-    em4: {
-        text: {
-            ru: "Я ожидаю, что чатбот Kaspi.kz будет адаптировать ответы к моей конкретной ситуации.",
-            en: "I expect that the Kaspi.kz chatbot will adapt its responses to my specific situation."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
+    // em3: {
+    //     text: {
+    //         ru: "Я ожидаю, что чатбот Kaspi.kz будет признавать мои опасения и реагировать на них должным образом.",
+    //         en: "I expect that the Kaspi.kz chatbot will acknowledge my concerns and respond to them appropriately."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
+    // em4: {
+    //     text: {
+    //         ru: "Я ожидаю, что чатбот Kaspi.kz будет адаптировать ответы к моей конкретной ситуации.",
+    //         en: "I expect that the Kaspi.kz chatbot will adapt its responses to my specific situation."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
     em5: {
         text: {
             ru: "Я ожидаю, что взаимодействие с чатботом Kaspi.kz будет ощущаться как искреннее стремление помочь, а не следование скрипту.",
@@ -319,24 +319,24 @@ const surveyData = {
         min: 1,
         max: 7
     },
-    hn3: {
-        text: {
-            ru: "Я ожидаю, что чатбот Kaspi.kz будет иметь выраженную и последовательную личность.",
-            en: "I expect that the Kaspi.kz chatbot will have a distinct and consistent personality."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
-    hn4: {
-        text: {
-            ru: "Я ожидаю, что разговоры с чатботом Kaspi.kz будут ощущаться естественными и плавными.",
-            en: "I expect that conversations with the Kaspi.kz chatbot will feel natural and smooth."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
+    // hn3: {
+    //     text: {
+    //         ru: "Я ожидаю, что чатбот Kaspi.kz будет иметь выраженную и последовательную личность.",
+    //         en: "I expect that the Kaspi.kz chatbot will have a distinct and consistent personality."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
+    // hn4: {
+    //     text: {
+    //         ru: "Я ожидаю, что разговоры с чатботом Kaspi.kz будут ощущаться естественными и плавными.",
+    //         en: "I expect that conversations with the Kaspi.kz chatbot will feel natural and smooth."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
     hn5: {
         text: {
             ru: "Я ожидаю, что чатбот Kaspi.kz создаст ощущение социального присутствия во время взаимодействия.",
@@ -348,15 +348,15 @@ const surveyData = {
     },
 
     // ==================== БЛОК З: Риск конфиденциальности до использования (PPR до) ====================
-    ppr_before1: {
-        text: {
-            ru: "Меня беспокоит, что чатбот Kaspi.kz может собирать мои персональные данные без моего ведома. <i style=\"font-weight: 400;\">Примечание: Kaspi имеет доступ к вашим финансовым данным, истории покупок и личной информации.</i>",       
-            en: "I am concerned that the Kaspi.kz chatbot may collect my personal data without my knowledge. <i style=\"font-weight: 400;\">Note: Kaspi has access to your financial data, purchase history, and personal information.</i>"
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
+    // ppr_before1: {
+    //     text: {
+    //         ru: "Меня беспокоит, что чатбот Kaspi.kz может собирать мои персональные данные без моего ведома. <i style=\"font-weight: 400;\">Примечание: Kaspi имеет доступ к вашим финансовым данным, истории покупок и личной информации.</i>",       
+    //         en: "I am concerned that the Kaspi.kz chatbot may collect my personal data without my knowledge. <i style=\"font-weight: 400;\">Note: Kaspi has access to your financial data, purchase history, and personal information.</i>"
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
     ppr_before2: {
         text: {
             ru: "Я опасаюсь, что информация, которой я делюсь с чатботом Kaspi.kz, может быть использована не в целях обслуживания клиентов.",
@@ -375,15 +375,15 @@ const surveyData = {
         min: 1,
         max: 7
     },
-    ppr_before4: {
-        text: {
-            ru: "Я чувствую неопределённость в том, как Kaspi.kz хранит и обрабатывает данные, собранные через чатбот.",
-            en: "I feel uncertain about how Kaspi.kz stores and processes data collected through the chatbot."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
+    // ppr_before4: {
+    //     text: {
+    //         ru: "Я чувствую неопределённость в том, как Kaspi.kz хранит и обрабатывает данные, собранные через чатбот.",
+    //         en: "I feel uncertain about how Kaspi.kz stores and processes data collected through the chatbot."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
     ppr_before5: {
         text: {
             ru: "Существует значительный риск того, что Kaspi.kz неправомерно использует информацию, собранную через чатбот.",
@@ -397,15 +397,15 @@ const surveyData = {
     // ==================== ЧАСТЬ 2 ====================
 
     // ==================== БЛОК И: Воспринимаемое качество информации (IQ реальный) ====================
-    iq_real1: {
-        text: {
-            ru: "Чатбот Kaspi.kz предоставил точную информацию о товарах, ценах и заказах.",
-            en: "The Kaspi.kz chatbot provided accurate information about products, prices, and orders."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
+    // iq_real1: {
+    //     text: {
+    //         ru: "Чатбот Kaspi.kz предоставил точную информацию о товарах, ценах и заказах.",
+    //         en: "The Kaspi.kz chatbot provided accurate information about products, prices, and orders."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
     iq_real2: {
         text: {
             ru: "Информация от чатбота Kaspi.kz была полной и достаточной для моих нужд.",
@@ -433,26 +433,26 @@ const surveyData = {
         min: 1,
         max: 7
     },
-    iq_real5: {
-        text: {
-            ru: "Я мог(ла) полагаться на информацию чатбота Kaspi.kz при принятии решений о покупке.",
-            en: "I could rely on the Kaspi.kz chatbot's information when making purchasing decisions."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
+    // iq_real5: {
+    //     text: {
+    //         ru: "Я мог(ла) полагаться на информацию чатбота Kaspi.kz при принятии решений о покупке.",
+    //         en: "I could rely on the Kaspi.kz chatbot's information when making purchasing decisions."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
 
     // ==================== БЛОК К: Воспринимаемая скорость (SP реальный) ====================
-    sp_real1: {
-        text: {
-            ru: "Чатбот Kaspi.kz быстро отвечал на мои вопросы.",
-            en: "The Kaspi.kz chatbot responded quickly to my questions."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
+    // sp_real1: {
+    //     text: {
+    //         ru: "Чатбот Kaspi.kz быстро отвечал на мои вопросы.",
+    //         en: "The Kaspi.kz chatbot responded quickly to my questions."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
     sp_real2: {
         text: {
             ru: "Чатбот Kaspi.kz обрабатывал мои запросы без заметных задержек.",
@@ -471,15 +471,15 @@ const surveyData = {
         min: 1,
         max: 7
     },
-    sp_real4: {
-        text: {
-            ru: "При использовании чатбота Kaspi.kz я не испытывал(а) раздражающего ожидания.",
-            en: "When using the Kaspi.kz chatbot, I did not experience frustrating waiting."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
+    // sp_real4: {
+    //     text: {
+    //         ru: "При использовании чатбота Kaspi.kz я не испытывал(а) раздражающего ожидания.",
+    //         en: "When using the Kaspi.kz chatbot, I did not experience frustrating waiting."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
     sp_real5: {
         text: {
             ru: "Общая скорость ответа чатбота Kaspi.kz соответствовала моим ожиданиям.",
@@ -509,24 +509,24 @@ const surveyData = {
         min: 1,
         max: 7
     },
-    em_real3: {
-        text: {
-            ru: "Чатбот Kaspi.kz признавал мои опасения и реагировал на них должным образом.",
-            en: "The Kaspi.kz chatbot acknowledged my concerns and responded to them appropriately."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
-    em_real4: {
-        text: {
-            ru: "Чатбот Kaspi.kz адаптировал свои ответы к моей конкретной ситуации.",
-            en: "The Kaspi.kz chatbot adapted its responses to my specific situation."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
+    // em_real3: {
+    //     text: {
+    //         ru: "Чатбот Kaspi.kz признавал мои опасения и реагировал на них должным образом.",
+    //         en: "The Kaspi.kz chatbot acknowledged my concerns and responded to them appropriately."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
+    // em_real4: {
+    //     text: {
+    //         ru: "Чатбот Kaspi.kz адаптировал свои ответы к моей конкретной ситуации.",
+    //         en: "The Kaspi.kz chatbot adapted its responses to my specific situation."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
     em_real5: {
         text: {
             ru: "Взаимодействие с чатботом Kaspi.kz ощущалось как искреннее стремление помочь мне.",
@@ -556,24 +556,24 @@ const surveyData = {
         min: 1,
         max: 7
     },
-    hn_real3: {
-        text: {
-            ru: "Чатбот Kaspi.kz имел выраженную и последовательную личность на протяжении всего взаимодействия.",
-            en: "The Kaspi.kz chatbot had a distinct and consistent personality throughout the interaction."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
-    hn_real4: {
-        text: {
-            ru: "Разговор с чатботом Kaspi.kz ощущался естественным и плавным.",
-            en: "The conversation with the Kaspi.kz chatbot felt natural and smooth."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
+    // hn_real3: {
+    //     text: {
+    //         ru: "Чатбот Kaspi.kz имел выраженную и последовательную личность на протяжении всего взаимодействия.",
+    //         en: "The Kaspi.kz chatbot had a distinct and consistent personality throughout the interaction."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
+    // hn_real4: {
+    //     text: {
+    //         ru: "Разговор с чатботом Kaspi.kz ощущался естественным и плавным.",
+    //         en: "The conversation with the Kaspi.kz chatbot felt natural and smooth."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
     hn_real5: {
         text: {
             ru: "Чатбот Kaspi.kz создал ощущение социального присутствия во время нашего взаимодействия.",
@@ -679,15 +679,15 @@ const surveyData = {
     },
 
     // ==================== БЛОК П: Риск конфиденциальности после использования (PPR после) ====================
-    ppr_after1: {
-        text: {
-            ru: "Меня беспокоит, что чатбот Kaspi.kz мог собирать мои персональные данные в ходе этого взаимодействия.",
-            en: "I am concerned that the Kaspi.kz chatbot may have collected my personal data during this interaction."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
+    // ppr_after1: {
+    //     text: {
+    //         ru: "Меня беспокоит, что чатбот Kaspi.kz мог собирать мои персональные данные в ходе этого взаимодействия.",
+    //         en: "I am concerned that the Kaspi.kz chatbot may have collected my personal data during this interaction."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
     ppr_after2: {
         text: {
             ru: "Я опасаюсь, что информация, которой я поделился(лась) с чатботом Kaspi.kz, может быть использована не в целях обслуживания клиентов.",
@@ -706,15 +706,15 @@ const surveyData = {
         min: 1,
         max: 7
     },
-    ppr_after4: {
-        text: {
-            ru: "Я чувствую неопределённость в том, как Kaspi.kz хранил и обрабатывал мои данные в ходе этого взаимодействия с чатботом.",
-            en: "I feel uncertain about how Kaspi.kz stored and processed my data during this interaction with the chatbot."
-        },
-        type: "scale",
-        min: 1,
-        max: 7
-    },
+    // ppr_after4: {
+    //     text: {
+    //         ru: "Я чувствую неопределённость в том, как Kaspi.kz хранил и обрабатывал мои данные в ходе этого взаимодействия с чатботом.",
+    //         en: "I feel uncertain about how Kaspi.kz stored and processed my data during this interaction with the chatbot."
+    //     },
+    //     type: "scale",
+    //     min: 1,
+    //     max: 7
+    // },
     ppr_after5: {
         text: {
             ru: "Существует значительный риск того, что Kaspi.kz неправомерно использует информацию, собранную через чатбот в ходе этого взаимодействия.",
@@ -773,33 +773,33 @@ const surveyData = {
     },
 
     // ==================== БЛОК С: Открытые вопросы ====================
-    open1: {
-        text: {
-            ru: "Что вам понравилось больше всего в чатботе Kaspi.kz в ходе данного взаимодействия?",
-            en: "What did you like most about the Kaspi.kz chatbot during this interaction?"
-        },
-        type: "textarea",
-        required: false,
-        rows: 3
-    },
-    open2: {
-        text: {
-            ru: "Что можно было бы улучшить в чатботе Kaspi.kz?",
-            en: "What could be improved in the Kaspi.kz chatbot?"
-        },
-        type: "textarea",
-        required: false,
-        rows: 3
-    },
-    open3: {
-        text: {
-            ru: "Повлияло ли взаимодействие с чатботом на ваши опасения относительно того, как Kaspi.kz обрабатывает ваши персональные данные? Пожалуйста, объясните.",
-            en: "Did the interaction with the chatbot affect your concerns about how Kaspi.kz handles your personal data? Please explain."
-        },
-        type: "textarea",
-        required: false,
-        rows: 4
-    }
+    // open1: {
+    //     text: {
+    //         ru: "Что вам понравилось больше всего в чатботе Kaspi.kz в ходе данного взаимодействия?",
+    //         en: "What did you like most about the Kaspi.kz chatbot during this interaction?"
+    //     },
+    //     type: "textarea",
+    //     required: false,
+    //     rows: 3
+    // },
+    // open2: {
+    //     text: {
+    //         ru: "Что можно было бы улучшить в чатботе Kaspi.kz?",
+    //         en: "What could be improved in the Kaspi.kz chatbot?"
+    //     },
+    //     type: "textarea",
+    //     required: false,
+    //     rows: 3
+    // },
+    // open3: {
+    //     text: {
+    //         ru: "Повлияло ли взаимодействие с чатботом на ваши опасения относительно того, как Kaspi.kz обрабатывает ваши персональные данные? Пожалуйста, объясните.",
+    //         en: "Did the interaction with the chatbot affect your concerns about how Kaspi.kz handles your personal data? Please explain."
+    //     },
+    //     type: "textarea",
+    //     required: false,
+    //     rows: 4
+    // }
 };
 
 if (typeof window !== 'undefined') {

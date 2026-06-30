@@ -107,7 +107,7 @@ router.patch('/part2', async (req, res) => {
             ...Object.values(rowValues),
             part2At,
             part2At,
-            1,
+            // 1,
             durationSeconds,
             data.lang || 'ru',
             existing.id
